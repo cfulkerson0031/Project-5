@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>menu items</title>
+
+
+      
+      <style> .btn{margin: 5px} </style>
+  </head>
+  <body>
+  
+      <script>
+
+    async function getData(major) {
+            var response = await fetch('cit5students.json');   // this is a GET request
+
+    // check if response to GET is valid
+    if(response.ok) {
+        
+        // get data from GET request
+        var data = await response.json();
+        // filer data by major
+        var items = data.filter( (item) => item.major == major );  
+
+        // target the table by ID
+        const tablerem = document.getElementById('majortable');
+        // if the table to remove exists
+        if (tablerem){
+            //get parrent element
+            const parentElement = tablerem.parentElement
+            // remove targeted table
+            parentElement.removeChild(tablerem)
+        }
+  var i=0, rowEl=null,
+    //create new table
+      tableEl = document.createElement("table");
+      // set the class for styling
+      tableEl.setAttribute("class", "border_class");
+      // set the ID so we can delete it later
+      tableEl.setAttribute("id", "majortable");
+  // create 10 table rows, each with two cells
+  var header = tableEl.createTHead();
+  // add a row
+  var row = header.insertRow(0);
+  
+  // add titles
+  var cell = row.insertCell(0).textContent = "name:";
+  var cell = row.insertCell(1).textContent = "major:";
+  var cell = row.insertCell(2).textContent = "midterm:";
+  var cell = row.insertCell(2).textContent = "final";
+   for(i=0; i < items.length; i++) {
+    // check if major is correct major
+    if (items[i].major == major) {
+    //create row for data and insert
+    rowEl = tableEl.insertRow();  // DOM method for creating table rows
+    rowEl.insertCell().textContent = items[i].name ;      
+    rowEl.insertCell().textContent = items[i].major;      
+    rowEl.insertCell().textContent = items[i].midterm ;   
+    rowEl.insertCell().textContent = items[i].final ; 
+    }       
+  }
+  // display table
+  document.body.appendChild( tableEl);
+
+    }
+    // if response was not valid
+    else {
+       document.querySelector('#menuTable').innerHTML = "There was an error, or menu items not found";
+    }	
+    }
+
+
+</script>
+
+      <div class="container">
+         <h2>Select a Major</h2>
+      
+         <div style='padding: 5px;'>
+            <!-- buttons for CIT and BUS majors that trigger function on click -->    
+            <button type='button' class="btn btn-primary" onClick="getData('CIT')">CIT Major</button> 
+            <button type='button' class="btn btn-primary" onClick="getData('BUS')">Business Major</button> 
+         </div>
+
+         <p> we filter our dataset by Major</p>
+
+
+    </body></html>
